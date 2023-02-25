@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,6 +13,9 @@ class Author(models.Model):
         all_author_rating = Comment.objects.filter(post__author=self.id).aggregate(comment_rating=Sum('comment_rating'))['comment_rating']
         self.user_rating = author_articles_rating * 3 + author_comments_rating + all_author_rating
         self.save()
+
+    def __str__(self):
+        return self.user.username
 
 
 class Category(models.Model):
@@ -30,7 +34,7 @@ class Post(models.Model):
     ]
 
     author = models.ForeignKey("Author", on_delete=models.CASCADE)
-    type = models.CharField(max_length=2, choices=TYPE, default=article)
+    type = models.CharField(max_length=2, choices=TYPE, default=news)
     post_time_in = models.DateTimeField(auto_now_add=True)
     category = models.ManyToManyField("Category", through="PostCategory")
     title = models.CharField(max_length=255)
@@ -50,6 +54,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title.title()}'
+
+    def get_absolute_url(self):
+        return reverse('news_detail', args=[str(self.id)])
 
 class PostCategory(models.Model):
     post = models.ForeignKey("Post", on_delete=models.CASCADE)

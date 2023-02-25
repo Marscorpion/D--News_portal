@@ -11,7 +11,7 @@ News
 {% block content %}
     <h1>All news</h1>
     <h3>{% current_time '%b %d %Y' %}</h3>
-    <h3>{{ news | length }}</h3>
+    <h3>Всего новостей {{ news | length }}</h3>
 
     <form action="" method="get">
         {{ filterset.form.as_p }}
