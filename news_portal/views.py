@@ -1,3 +1,6 @@
+from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from datetime import datetime
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -64,6 +67,9 @@ class NewsUpdate(UpdateView):
         post.save()
         return super().form_valid(form)
 
+    class ProtectedView(LoginRequiredMixin, TemplateView):
+        template_name = 'news_edit.html'
+
 class ArticleUpdate(UpdateView):
     form_class = NewsForm
     model = Post
@@ -76,6 +82,9 @@ class ArticleUpdate(UpdateView):
         post.save()
         return super().form_valid(form)
 
+    class ProtectedView(LoginRequiredMixin, TemplateView):
+        template_name = 'article_edit.html'
+
 class NewsDelete(DeleteView):
     model = Post
     success_url = reverse_lazy('news_list')
@@ -86,6 +95,8 @@ class ArticleDelete(DeleteView):
     model = Post
     success_url = reverse_lazy('news_list')
     template_name = 'article_delete.html'
+
+
 
 
 
