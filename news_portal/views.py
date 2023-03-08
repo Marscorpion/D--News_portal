@@ -101,7 +101,7 @@ class ArticleDelete(DeleteView):
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
-    template_name = '/profile.html'
+    template_name = 'profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -114,6 +114,6 @@ def upgrade_me(request):
     author_group = Group.objects.get(name='author')
     if not request.user.groups.filter(name='author').exists():
         author_group.user_set.add(user)
-    return redirect('/profile/')
+    return redirect('/')
 
 

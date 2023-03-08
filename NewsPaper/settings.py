@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 ]
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = "/profile/"
+LOGIN_REDIRECT_URL = "/news/"
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 ACCOUNT_FORMS = {'signup': 'news_portal.models.CommonSignupForm'}
 
