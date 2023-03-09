@@ -105,15 +105,15 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(name='author').exists()
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         return context
 
 @login_required
 def upgrade_me(request):
     user = request.user
-    author_group = Group.objects.get(name='author')
-    if not request.user.groups.filter(name='author').exists():
-        author_group.user_set.add(user)
-    return redirect('/')
+    authors_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        authors_group.user_set.add(user)
+    return redirect('news_list')
 
 
