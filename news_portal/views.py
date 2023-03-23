@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import TemplateView
 from datetime import datetime
 from django.urls import reverse_lazy
@@ -38,30 +38,36 @@ class NewsDetail(DetailView):
     template_name = "post.html"
     context_object_name = 'post'
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'news_portal.add_post'
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
+
 
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NS'
         return super().form_valid(form)
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'news_portal.add_post'
     form_class = NewsForm
     model = Post
     template_name = 'article_edit.html'
+
 
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'AC'
         return super().form_valid(form)
 
-class NewsUpdate(UpdateView):
+class NewsUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'news_portal.change_post'
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
+
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -73,7 +79,8 @@ class NewsUpdate(UpdateView):
     class ProtectedView(LoginRequiredMixin, TemplateView):
         template_name = 'news_edit.html'
 
-class ArticleUpdate(UpdateView):
+class ArticleUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'news_portal.change_post'
     form_class = NewsForm
     model = Post
     template_name = 'article_edit.html'
