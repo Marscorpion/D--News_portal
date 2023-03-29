@@ -13,6 +13,6 @@ class PostFilter(FilterSet):
        model = Post
        fields = {
            'author': ['exact'],
-           'category': ['exact'],
+           # 'category': ['exact'],
            'title': ['icontains'],
        }

@@ -15,7 +15,9 @@ News
 
     <form action="" method="get">
         {{ filterset.form.as_p }}
-        <input type="submit" value="Найти" />
+        {% if is_not_subscriber %}
+          <p class="text-center"><a href="{% url 'subscribe' category.id %}" class="btn btn-secondary btn-sm">Подписаться</a></p>
+        {% endif %}
     </form>
 
     <hr>
@@ -30,7 +32,7 @@ News
            {% for post in news %}
            <tr>
                <td>{{ post.post_time_in | date:'M d Y' }}</td>
-               <td><a href="{{ post.id }}">{{ post.title | cenzor }}</a></td>
+               <td>{{ post.title | cenzor }}</td>
                <td>{{ post.post_text | truncatewords:20 | cenzor }}</td>
 
                <td>{% for category in post.category.all %}
@@ -63,3 +65,7 @@ News
    {% endif %}
 
 {% endblock content %}
+
+
+
+
