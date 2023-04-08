@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import TemplateView
+from django.core.mail import EmailMultiAlternatives
 from datetime import datetime
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -8,6 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 
 from .forms import NewsForm
 from .models import Post, Category
@@ -145,6 +147,22 @@ def subscribe(request, pk):
     category = Category.objects.get(id=pk)
     category.subscribers.add(user)
 
-    message = 'Вы подписались на рассылку новостей категории'
-    return render(request, 'subscribe.html', {'category': category, 'message': message})
+    html_content = render_to_string(
+        'subscribe.html',
+        {
+            'category': category,
+        }
+    )
 
+    msg = EmailMultiAlternatives(
+        subject=f'{user} {category}',
+        body=category,
+        from_email='seafoamskl@yandex.ru',
+        to=['skl.74@mail.ru'],
+    )
+    msg.attach_alternative(html_content, "text/html")
+
+    msg.send()
+
+    message = 'Вы подписались на рассылку новостей категории'
+    return render(request, 'news.subscribe.html', {'category': category, 'message': message})
