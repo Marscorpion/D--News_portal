@@ -37,7 +37,7 @@ News
                <td>{{ post.post_text | truncatewords:20 | cenzor }}</td>
 
                <td>{% for category in post.category.all %}
-                <a href="categories/{{ category.id }}" >{{category}}</a>
+                <a href="categories/{{ category.id }}">{{category}}</a>
                 {% endfor %}
                 </td>
            </tr>

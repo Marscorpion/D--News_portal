@@ -148,15 +148,15 @@ def subscribe(request, pk):
     category.subscribers.add(user)
 
     html_content = render_to_string(
-        'subscribe.html',
+        'send_email.html',
         {
-            'category': category,
+            'category': category.name,
         }
     )
 
     msg = EmailMultiAlternatives(
-        subject=f'{user} {category}',
-        body=category,
+        subject=f'{user} {category.name}',
+        body=category.name,
         from_email='seafoamskl@yandex.ru',
         to=['skl.74@mail.ru'],
     )
@@ -165,4 +165,4 @@ def subscribe(request, pk):
     msg.send()
 
     message = 'Вы подписались на рассылку новостей категории'
-    return render(request, 'news.subscribe.html', {'category': category, 'message': message})
+    return render(request, 'subscribe.html', {'category': category, 'message': message})
