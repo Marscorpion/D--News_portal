@@ -5,6 +5,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from .models import PostCategory
+from .tasks import notify_about_new_post
 
 def send_notifications(preview, pk, title, subscribers):
     html_content = render_to_string(
@@ -35,5 +36,5 @@ def notify_about_new_post(sender, instance, **kwargs):
 
         subscribers = [s.email for s in subscribers]
 
-        send_notifications(instance.preview(), instance.pk, instance.title, subscribers)
+        send_notifications.delay(instance.preview(), instance.pk, instance.title, subscribers)
 
