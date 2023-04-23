@@ -39,9 +39,9 @@ def send_email_task(pk):
 def weekly_notifications_task():
     today = datetime.datetime.now()
     last_week = today - datetime.timedelta(days=7)
-    posts = Post.objects.filter(post_time_in_gte=last_week)
-    categories = set(posts.values_list('post_category__category__name', flat=True))
-    subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers_email', flat=True))
+    posts = Post.objects.filter(post_time_in__gte=last_week)
+    categories = set(posts.values_list('category__name', flat=True))
+    subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers', flat=True))
     html_content = render_to_string(
         'daily_post.html',
         {
