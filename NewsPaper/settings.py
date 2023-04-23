@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'mc_donalds',
     'news_portal.apps.NewsPortalConfig',
     'django_filters',
-    'django_apscheduler',
+    # 'django_apscheduler',
 
     'allauth',
     'allauth.account',
@@ -180,9 +180,9 @@ ADMINS = [
 ]
 SERVER_EMAIL = 'seafoamskl@yandex.ru'
 
-APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
-
-APSCHEDULER_RUN_NOW_TIMEOUT = 25
+# APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+#
+# APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")

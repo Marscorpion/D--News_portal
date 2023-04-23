@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
+from .tasks import send_email_task
 
 from .forms import NewsForm
 from .models import Post, Category
@@ -50,6 +51,8 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'NS'
+        post.save()
+        send_email_task.delay(post.pk)
         return super().form_valid(form)
 
 class ArticleCreate(PermissionRequiredMixin, CreateView):
@@ -62,6 +65,8 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'AC'
+        post.save()
+        send_email_task.delay(post.pk)
         return super().form_valid(form)
 
 class NewsUpdate(PermissionRequiredMixin, UpdateView):

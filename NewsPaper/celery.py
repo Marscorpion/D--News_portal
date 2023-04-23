@@ -9,8 +9,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.beat_schedule = {
     'weekly_notifications': {
-        'task': 'news.tasks.notify_subscribers_weekly',
-        'schedule': crontab(hour=8, minute=0, day_of_week='monday'),
+        'task': 'news_portal.tasks.weekly_notifications_task',
+        'schedule': crontab(hour=8, minute=00, day_of_week='monday'),
     },
 }
 
