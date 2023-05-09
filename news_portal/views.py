@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from .tasks import send_email_task
+from django.core.cache import cache
 
 from .forms import NewsForm
 from .models import Post, Category
@@ -40,6 +41,15 @@ class NewsDetail(DetailView):
     model = Post
     template_name = "post.html"
     context_object_name = 'post'
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'news-{self.kwargs["pk"]}', None)
+
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'news-{self.kwargs["pk"]}', obj)
+
+        return obj
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'news_portal.add_post'
